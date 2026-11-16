@@ -1,0 +1,61 @@
+#include "rp6502.h"
+#include <stddef.h>
+#include <stdint.h>
+
+/* With no arguments, argv is an empty list, as C requires. */
+static char *no_args[1];
+
+int __argc;
+char **__argv = no_args;
+
+/* Override to provide storage for argv, e.g.:
+ *   void *__argv_mem(size_t size) { return malloc(size); }
+ * Returns NULL (default) to silently skip argc/argv setup.
+ */
+__attribute__((weak)) void *__argv_mem(size_t size) {
+  (void)size;
+  return NULL;
+}
+
+/* .init.220: after zero-bss (.init.200) so malloc is usable in __argv_mem(). */
+asm(".section .init.220,\"ax\",@progbits\n"
+    "  jsr __do_initmainargs\n");
+
+void __do_initmainargs(void) {
+  /* Only the size is needed now. The drop lets __argv_mem() make API calls. */
+  RIA.op = RIA_OP_ARGV;
+  int size = ria_spin();
+  ria_drop();
+  void *buf = __argv_mem(size);
+  if (!buf)
+    return;
+
+  /* Ask again for the data, and skip argv if its size changed. */
+  RIA.op = RIA_OP_ARGV;
+  if (ria_spin() != size) {
+    ria_drop();
+    return;
+  }
+
+  /* Pop all bytes from xstack into buf, in order. */
+  unsigned char *p = (unsigned char *)buf;
+  while (size--)
+    *p++ = RIA.xstack;
+
+  /* Relocate the offset table at the head of buf.
+   * The RIA stores 2-byte little-endian offsets relative to buf start.
+   * A zero entry terminates the table. */
+  unsigned char *raw = (unsigned char *)buf;
+  char **ptrs = (char **)buf;
+  int argc = 0;
+  for (;;) {
+    uint16_t offset =
+        (uint16_t)raw[argc * 2] | ((uint16_t)raw[argc * 2 + 1] << 8);
+    if (!offset)
+      break;
+    ptrs[argc] = (char *)buf + offset;
+    argc++;
+  }
+  __argc = argc;
+  __argv = ptrs;
+}
