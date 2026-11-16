@@ -1,0 +1,168 @@
+# GCC C torture execute tests expected to fail at -O0 with mos-sim-clang.
+# Each failed the same way with stock llvm-mos (ae72e49843c2) and the same
+# llvm-mos-sdk; the lists that follow the status are the llvm-test-suite
+# CMakeLists.txt lists that name the test (MOSTestsToSkip and the others
+# skipped for MOS, UnsupportedTests for GCC extensions clang lacks).
+20000412-2.c run  # MOSO0TestsToSkip
+20000822-1.c build  # UnsupportedTests
+20001121-1.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+20010122-1.c build  # MOSTestsToSkip UnsupportedTests
+20010209-1.c build  # UnsupportedTests
+20010605-1.c build  # UnsupportedTests
+20020107-1.c build  # UnsupportedTests
+20020404-1.c run  # MOSTestsToSkip
+20020412-1.c build  # UnsupportedTests
+20021024-1.c timeout  # MOSTestsToSkip
+20030209-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+20030222-1.c build  # MOSTestsToSkip
+20030501-1.c build  # UnsupportedTests
+20040308-1.c build  # UnsupportedTests
+20040423-1.c build  # UnsupportedTests
+20040520-1.c build  # UnsupportedTests
+20040629-1.c build  # MOSTestsToSkip
+20040703-1.c run  # MOSTestsToSkip
+20040705-1.c build  # MOSTestsToSkip
+20040705-2.c build  # MOSTestsToSkip
+20040709-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+20040709-2.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+20040709-3.c build  # MOSTestsToSkip
+20040811-1.c run  # MOSTestsToSkip
+20041218-2.c build  # UnsupportedTests
+20050316-1.c build  # MOSTestsToSkip
+20050604-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+20060420-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+20061101-1.c run  # MOSTestsToSkip
+20061220-1.c build  # UnsupportedTests
+20070919-1.c build  # UnsupportedTests
+20081117-1.c run  # MOSTestsToSkip
+20090219-1.c build  # UnsupportedTests
+20101011-1.c run  # UnsupportedTests
+20120919-1.c run  # MOSTestsToSkip TestRequiresLibPrintfFlt
+20180131-1.c run  # MOSTestsToSkip
+920302-1.c build  # MOSTestsToSkip TestRequiresWNoReturnType
+920410-1.c build  # MOSTestsToSkip
+920415-1.c build  # UnsupportedTests
+920428-2.c build  # UnsupportedTests
+920501-7.c build  # UnsupportedTests
+920612-2.c build  # UnsupportedTests
+920721-4.c build  # UnsupportedTests
+921017-1.c build  # UnsupportedTests
+921113-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+921208-2.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+921215-1.c build  # UnsupportedTests
+930106-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+930526-1.c build  # UnsupportedTests
+931002-1.c build  # UnsupportedTests
+960521-1.c run  # MOSTestsToSkip
+961223-1.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+980605-1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+980608-1.c build  # UnsupportedTests
+980709-1.c build  # TestRequiresLibM TestRequiresLibPrintfFlt
+990413-2.c build  # TestRequiresLibPrintfFlt X86OnlyTests
+alias-1.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+align-nest.c build  # UnsupportedTests
+bcp-1.c build  # UnsupportedTests
+bitfld-3.c run  # FailingTests
+bitfld-4.c build  # MOSTestsToSkip
+bitfld-5.c run  # FailingTests
+bitfld-6.c build  # MOSTestsToSkip
+bitfld-7.c build  # MOSTestsToSkip
+bswap-2.c run  # MOSTestsToSkip
+built-in-setjmp.c build  # AArch64TestsToSkip HexagonTestsToSkip LoongArchTestsToSkip MOSTestsToSkip MipsTestsToSkip RISCVTestsToSkip SystemZTestsToSkip
+builtin-prefetch-1.c build  # MOSTestsToSkip
+builtin-prefetch-2.c build  # MOSTestsToSkip
+builtin-prefetch-3.c build  # MOSTestsToSkip
+builtin-prefetch-4.c build  # MOSTestsToSkip
+builtin-prefetch-5.c build  # MOSTestsToSkip
+builtin-prefetch-6.c build  # MOSTestsToSkip
+cmpsi-2.c run  # MOSTestsToSkip
+comp-goto-2.c build  # UnsupportedTests
+eeprof-1.c run  # UnsupportedTests
+enum-3.c build  # MOSTestsToSkip
+float-floor.c build  # TestRequiresLibM TestRequiresLibPrintfFlt
+fprintf-2.c build  # MOSTestsToSkip
+frame-address.c build  # MOSTestsToSkip UnsupportedTests
+ipa-sra-2.c build  # MOSTestsToSkip
+loop-2c.c build  # UnsupportedTests
+loop-2f.c build  # MMapTests
+loop-2g.c build  # MMapTests
+medce-1.c build  # UnsupportedTests
+memcpy-1.c build  # MOSTestsToSkip
+multi-ix.c build  # MOSO0TestsToSkip TestRequiresLibPrintfFlt
+nest-align-1.c build  # UnsupportedTests
+nest-stdar-1.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+nestfunc-1.c build  # UnsupportedTests
+nestfunc-2.c build  # UnsupportedTests
+nestfunc-3.c build  # UnsupportedTests
+nestfunc-4.c run  # MOSO0TestsToSkip
+nestfunc-5.c build  # UnsupportedTests
+nestfunc-6.c build  # UnsupportedTests
+nestfunc-7.c build  # UnsupportedTests
+noinit-attribute.c run  # UnsupportedTests
+p18298.c build  # UnsupportedTests
+pr17377.c build  # MOSTestsToSkip
+pr19689.c build  # MOSTestsToSkip
+pr22061-3.c build  # UnsupportedTests
+pr22061-4.c build  # UnsupportedTests
+pr24135.c build  # UnsupportedTests
+pr28865.c build  # UnsupportedTests
+pr28982b.c build  # MOSTestsToSkip MipsTestsToSkip TestRequiresLibPrintfFlt
+pr29797-1.c run  # MOSTestsToSkip
+pr31448.c build  # MOSTestsToSkip
+pr32244-1.c run  # FailingTests
+pr34971.c run  # FailingTests
+pr36093.c build  # UnsupportedTests
+pr37573.c run  # MOSTestsToSkip
+pr39228.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+pr41935.c build  # UnsupportedTests
+pr43220.c run  # MOSTestsToSkip
+pr43783.c build  # UnsupportedTests
+pr45262.c run  # MOSTestsToSkip
+pr47237.c build  # UnsupportedTests
+pr51447.c build  # UnsupportedTests
+pr52286.c build  # MOSTestsToSkip
+pr52979-1.c build  # MOSTestsToSkip
+pr52979-2.c build  # MOSTestsToSkip
+pr53645-2.c build  # MOSTestsToSkip
+pr56799.c run  # MOSTestsToSkip
+pr57124.c run  # MOSTestsToSkip
+pr57344-2.c build  # MOSTestsToSkip
+pr58570.c build  # MOSTestsToSkip
+pr58574.c build  # MOSO0TestsToSkip TestRequiresLibPrintfFlt
+pr60003.c build  # FailingTests
+pr60822.c build  # MOSTestsToSkip
+pr64242.c build  # UnsupportedTests
+pr65053-1.c build  # MOSTestsToSkip
+pr65053-2.c build  # MOSTestsToSkip
+pr65369.c build
+pr65956.c build  # MOSTestsToSkip
+pr66556.c run  # MOSTestsToSkip
+pr67781.c run  # MOSTestsToSkip
+pr68648.c run  # MOSTestsToSkip
+pr70602.c build  # MOSTestsToSkip
+pr71494.c build  # UnsupportedTests
+pr7284-1.c run  # MOSTestsToSkip
+pr78170.c build  # MOSTestsToSkip
+pr79043.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+pr80692.c build  # UnsupportedTests
+pr82210.c build  # UnsupportedTests
+pr84521.c build  # AArch64TestsToSkip HexagonTestsToSkip LoongArchTestsToSkip MOSTestsToSkip MipsTestsToSkip RISCVTestsToSkip SystemZTestsToSkip
+pr84748.c build  # ARMTestsToSkip HexagonTestsToSkip MOSTestsToSkip Mips32TestsToSkip RISCV32TestsToSkip
+pr85331.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+pr88904.c build  # MOSTestsToSkip
+pr89195.c build  # MOSTestsToSkip
+printf-2.c build  # MOSTestsToSkip
+restrict-1.c build  # UnsupportedTests
+scal-to-vec1.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+scal-to-vec3.c build  # MOSTestsToSkip TestRequiresLibPrintfFlt
+shiftdi.c run  # MOSTestsToSkip
+stkalign.c build  # MOSTestsToSkip
+strlen-5.c build  # MOSO0TestsToSkip
+unroll-1.c build  # UnsupportedTests
+user-printf.c build  # MOSTestsToSkip
+usmul.c run  # MOSTestsToSkip
+va-arg-7.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+va-arg-8.c build  # UnsupportedTests
+va-arg-pack-1.c build  # TestRequiresLibPrintfFlt UnsupportedTests
+vrp-5.c run  # MOSTestsToSkip
+vrp-6.c run  # MOSTestsToSkip

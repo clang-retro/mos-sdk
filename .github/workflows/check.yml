@@ -1,0 +1,91 @@
+# For every pull request and push: check the scripts, and when
+# clang-retro/llvm's llvm-prebuilt release has the MOS target, build the SDK
+# (compiler-rt's builtins from the same LLVM commit, then every platform's
+# libraries and examples), run the tests in mos-sim at -Os, -O0 and -O2, and
+# run the GCC C torture execute tests at -Os against their expected failures.
+name: Check
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**/*.md', 'LICENSE*']
+  pull_request:
+    paths-ignore: ['**/*.md', 'LICENSE*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # llvm-mos's fork of llvm-test-suite, for the torture tests.
+  TEST_SUITE_REF: 5f38e99463eb6024176e985d733787160b16cee9
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Scripts
+        run: |
+          sh -n build-sdk.sh
+          sh -n tests/run-tests.sh
+          python3 -m py_compile tests/torture/run-torture.py
+      - name: Get clang
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          asset=$(gh api repos/clang-retro/llvm/releases/tags/llvm-prebuilt --jq \
+            '[.assets[] | select(.name | startswith("llvm-linux-"))] | sort_by(.created_at) | last | .name')
+          echo "Using $asset"
+          gh release download llvm-prebuilt -R clang-retro/llvm -p "$asset" -O llvm.tar.zst
+          mkdir -p "$RUNNER_TEMP/llvm"
+          tar --zstd -xf llvm.tar.zst -C "$RUNNER_TEMP/llvm"
+          rm llvm.tar.zst
+          echo "PREFIX=$RUNNER_TEMP/llvm" >> "$GITHUB_ENV"
+          sha=${asset#llvm-linux-}
+          echo "LLVM_SHA=${sha%%-*}" >> "$GITHUB_ENV"
+          if "$RUNNER_TEMP/llvm/bin/clang" --target=mos -E -dM -x c /dev/null 2>/dev/null | grep -q __mos__; then
+            echo "HAVE_MOS=1" >> "$GITHUB_ENV"
+          else
+            echo "::warning::$asset has no MOS target yet; skipping the build and the tests"
+          fi
+      - name: Get compiler-rt
+        if: env.HAVE_MOS == '1'
+        uses: actions/checkout@v4
+        with:
+          repository: clang-retro/llvm
+          ref: ${{ env.LLVM_SHA }}
+          path: llvm
+          sparse-checkout: |
+            compiler-rt
+            llvm/cmake
+            cmake
+          persist-credentials: false
+      - name: Build the SDK
+        if: env.HAVE_MOS == '1'
+        run: |
+          sudo apt-get install -y ninja-build
+          LLVM_SRC=$PWD/llvm EXAMPLES=ON ./build-sdk.sh
+      - name: Tests
+        if: env.HAVE_MOS == '1'
+        run: tests/run-tests.sh
+      - name: Get the torture tests
+        if: env.HAVE_MOS == '1'
+        uses: actions/checkout@v4
+        with:
+          repository: llvm-mos/llvm-test-suite
+          ref: ${{ env.TEST_SUITE_REF }}
+          path: test-suite
+          sparse-checkout: SingleSource/Regression/C/gcc-c-torture/execute
+          persist-credentials: false
+      - name: Torture tests
+        if: env.HAVE_MOS == '1'
+        run: |
+          TORTURE_SRC=$PWD/test-suite/SingleSource/Regression/C/gcc-c-torture/execute \
+            tests/torture/run-torture.py -Os
