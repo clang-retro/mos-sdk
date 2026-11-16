@@ -1,0 +1,12 @@
+# From llvm-mos-sdk
+.DS_Store
+*.code-workspace
+.vscode/**
+*~
+*.rej
+
+# Build directories (build-sdk.sh, tests)
+/build/
+/build-*/
+/tests-out/
+__pycache__/

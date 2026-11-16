@@ -1,0 +1,101 @@
+platform(rp6502 COMPLETE HOSTED PARENT common)
+
+if(NOT CMAKE_CROSSCOMPILING)
+  return()
+endif()
+
+install(FILES
+  rp6502.h
+  time.h
+TYPE INCLUDE)
+install(FILES rp6502.inc DESTINATION ${ASMINCDIR})
+install(FILES link.ld TYPE LIB)
+
+add_platform_object_file(rp6502-crt0-o crt0.o
+  callmain.s
+  init-cpu.s
+)
+target_link_libraries(rp6502-crt0-o PRIVATE common-asminc)
+
+add_platform_library(rp6502-crt0
+  exit.c
+)
+merge_libraries(rp6502-crt0
+  common-init-stack
+  common-copy-zp-data
+  common-zero-bss
+  common-exit-custom
+)
+
+add_platform_library(rp6502-c
+  asctime.c
+  chdir.c
+  clock.c
+  close.c
+  creat.c
+  ctime.c
+  errno.s
+  f_chmod.c
+  f_closedir.c
+  f_getfree.c
+  f_getlabel.c
+  f_lseek.c
+  f_mkdir.c
+  f_opendir.c
+  f_readdir.c
+  f_rewinddir.c
+  f_seekdir.c
+  f_setlabel.c
+  f_stat.c
+  f_telldir.c
+  f_utime.c
+  getchar.c
+  getcwd.c
+  gmtime.c
+  isatty.c
+  localtime.c
+  lseek.c
+  mainargs.c
+  mkdir.c
+  mktime.c
+  open.c
+  putchar.c
+  read_xram.c
+  read_xstack.c
+  read.c
+  remove.c
+  rename.c
+  ria_attr.c
+  ria_drop.c
+  ria_execl.c
+  ria_execv.c
+  ria_irq.c
+  ria_rln_lastkey.c
+  ria_rln_peek.c
+  ria_rln_poke.c
+  ria_spin.s
+  ria_vsync.c
+  sleep.c
+  strftime.c
+  syncfs.c
+  time.c
+  time_set.c
+  tm_conv.c
+  write_xram.c
+  write_xstack.c
+  write.c
+  xram_move.s
+  xram_peek.c
+  xram_poke.c
+  xram_read.s
+  xram_set.s
+  xram_write.s
+  xregn.c
+)
+
+target_compile_options(rp6502-crt0 PUBLIC -mcpu=mosw65c02)
+target_link_libraries(rp6502-crt0 PRIVATE common-asminc)
+
+target_include_directories(rp6502-c BEFORE PUBLIC .)
+target_compile_options(rp6502-c PUBLIC -mcpu=mosw65c02)
+target_link_libraries(rp6502-c PRIVATE common-asminc)
